@@ -1,0 +1,6 @@
+export const darkBg = "black"
+export const lightBg = "white"
+export const darkColor = "black" 
+export const lightColor = "white"
+export const darkBorder = "black"
+export const lightBorder = "white"
