@@ -15,7 +15,7 @@ const taskListStyle = (style)=>{
             justifyContent: 'center', 
             backgroundColor:isDark ?  "#222831": "#334257" ,
             borderRadius: 15,
-            elevation: 8,
+            // elevation: 8,
             flexDirection: 'row',
             paddingLeft: 16,
             paddingRight: 14,
