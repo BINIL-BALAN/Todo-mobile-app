@@ -1,5 +1,5 @@
 import {useContext} from 'react'
-import Home from './src/modules/pages/Home'
+import Home from './src/modules/pages/Home/Home'
 import Navbar from './src/modules/components/Navbar'
 import { View } from 'react-native'
 import { AllStyles } from './src/context/StyleContext'

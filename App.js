@@ -1,15 +1,42 @@
 // import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView,StyleSheet,Platform,StatusBar,Dimensions} from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Platform,
+  StatusBar,
+  Dimensions,
+  Alert,
+} from "react-native";
 import { StyleContext } from "./src/context/StyleContext";
 import Main from "./Main";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  HttpLink,
+  from,
+} from "@apollo/client";
+import { UserContext } from "./src/context/UserContext";
 export default function App() {
-console.log(Dimensions.get('screen'));
+  const link = from([
+    new HttpLink({ uri: "http://192.168.1.37:8000/graphql" }),
+  ]);
+  const client = new ApolloClient({
+    cache: new InMemoryCache(),
+    link: link,
+  });
+
+  // console.log(Dimensions.get('screen'));
   return (
-    <SafeAreaView style={styles.container}>
-      <StyleContext>
-        <Main />
-      </StyleContext>
-    </SafeAreaView>
+    <ApolloProvider client={client}>
+      <SafeAreaView style={styles.container}>
+        <StyleContext>
+          <UserContext>
+            <Main />
+          </UserContext>
+        </StyleContext>
+      </SafeAreaView>
+    </ApolloProvider>
   );
 }
 
