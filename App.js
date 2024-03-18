@@ -16,10 +16,11 @@ import {
   HttpLink,
   from,
 } from "@apollo/client";
+import { baseUrl } from "./constant";
 import { UserContext } from "./src/context/UserContext";
 export default function App() {
   const link = from([
-    new HttpLink({ uri: "http://192.168.1.37:8000/graphql" }),
+    new HttpLink({ uri: baseUrl }),
   ]);
   const client = new ApolloClient({
     cache: new InMemoryCache(),
