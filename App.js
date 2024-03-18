@@ -15,16 +15,46 @@ import {
   ApolloProvider,
   HttpLink,
   from,
+  createHttpLink
 } from "@apollo/client";
-import { baseUrl } from "./constant";
+
+import { getMainDefinition } from "@apollo/client/utilities";
+import { split } from "@apollo/client";
+import { WebSocketLink } from "@apollo/client/link/ws";
+
+import { baseUrl,wsUrl } from "./constant";
 import { UserContext } from "./src/context/UserContext";
 export default function App() {
-  const link = from([
-    new HttpLink({ uri: baseUrl }),
-  ]);
+  // const link = from([
+  //   new HttpLink({ uri: baseUrl }),
+  // ]);
+
+  const httpLink = createHttpLink({
+    uri: baseUrl,
+  });
+
+  const wsLink = new WebSocketLink({
+    uri: wsUrl,
+    options: {
+      reconnect: true,
+    },
+  });
+
+  const link = split(
+    ({ query }) => {
+      const definition = getMainDefinition(query);
+      return (
+        definition.kind === 'OperationDefinition' &&
+        definition.operation === 'subscription'
+      );
+    },
+    wsLink,
+    httpLink
+  );
+
   const client = new ApolloClient({
     cache: new InMemoryCache(),
-    link: link,
+    link,
   });
 
   // console.log(Dimensions.get('screen'));

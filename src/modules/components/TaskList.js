@@ -1,12 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity,ActivityIndicator } from "react-native";
 import taskListStyle from "./styles.js/taskListStyle";
 import { AllStyles } from "../../context/StyleContext";
 import { Icon } from "react-native-material-ui";
 import { UserDetails } from "../../context/UserContext";
+import { useSubscription } from "@apollo/client";
+import {subscription_task} from './Graphql/mutation'
 function TaskList() {
   const allStyles = useContext(AllStyles);
   const [id,setId] = useState("")
+  const [tasks,setTasks] = useState([])
   const [deleteId,setDeleteId] = useState("")
   const { user, handleOperations,loading } = useContext(UserDetails);
   const style = taskListStyle(allStyles);
@@ -18,10 +21,19 @@ function TaskList() {
     }
     handleOperations(data,operation)
   }
+  const {data} = useSubscription(subscription_task)
+
+  useEffect(()=>{
+    setTasks(data?.updations?.details.task)
+   console.log(data?.updations?.details);
+  },[data?.updations?.details.task])
+  useEffect(()=>{
+    setTasks(user.task)
+  },[user.task])
   return (
     <View>
      
-      {user?.task?.map((item, index) => (
+      {tasks?.map((item, index) => (
         <View style={style.mainCardView} key={index}>
           <View style={style.textContainer}>
             <Text style={style.text}>
@@ -49,7 +61,7 @@ function TaskList() {
           </View>
         </View>
       ))}
-      {user?.task?.length == 0 && (
+      {tasks?.length == 0 && (
         <Text style={{ textAlign: "center" }}>No more tasks</Text>
       )}
     </View>

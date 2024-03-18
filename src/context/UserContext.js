@@ -19,7 +19,7 @@ export const UserContext = ({children})=>{
           })
           const {details,result} = operationResult.data.operations
           if(result.statusCode == 200){
-            setUser(details)
+            // setUser(details)
             operation == "post" && Alert.alert(result.message)
           }else{
             Alert.alert(result.message)
